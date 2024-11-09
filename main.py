@@ -49,13 +49,6 @@ def steq(x, y):
         return False
 
 
-def _not_(x):
-    if not x:
-        return True
-    else:
-        return False
-
-
 def CAnd(x):
     for i in x:
         if i == False:
