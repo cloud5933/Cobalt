@@ -4,7 +4,7 @@ from main import *
 from colorama import Fore, Back, Style
 
 functions = ["when", "log"]
-operators = [">", "<", "==", ">=", "<=", "!=", "&&", "||"]
+operators = [">", "<", "==", ">=", "<=", "!=", "&&", "||", "!"]
 mathOperators = ["+", "-", "*", "/"]
 functionLine = False
 operationLine = False
@@ -99,21 +99,27 @@ def functionRunner(variablesSaved):
             for i in operators:
                 if i in insideBracket:
                     operationInLog = True
+            counter = 0
+            for i in range(len(insideBracket)):
+                if insideBracket[i] == '"':
+                    counter += 1
             if insideBracket[0] == '"':
-                counter = 0
-                for i in range(len(insideBracket)):
-                    if insideBracket[i] == '"':
-                        counter += 1
                 if counter % 2 == 0:
                     print(insideBracket.split('"')[1])
                 else:
-                    print(Fore.RED + 'Error: Line ' + str(row) + ': syntax error: {"} was opened but not closed.', "Code:", Fore.YELLOW + rawCode)
+                    print(Fore.RED + 'Error: Line ' + str(row) + ': syntax error: {"} is not in pair.', "Code:", Fore.YELLOW + rawCode)
                     print(Style.RESET_ALL)
                     error = True
+                    return
             elif ("+" in insideBracket or "-" in insideBracket or "*" in insideBracket or "/" in insideBracket or "=" in insideBracket):
-                if operationInLog == False:
+                if counter % 2 != 0:
+                    print(Fore.RED + 'Error: Line ' + str(row) + ': syntax error: {"} is not in pair.', "Code:", Fore.YELLOW + rawCode)
+                    print(Style.RESET_ALL)
+                    error = True
+                    return
+                elif operationInLog == False:
                     output = MathOperation(insideBracket)
-                    if not error:
+                    if not error and len(output) >= 2:
                         if 48 <= ord(output[1]) <= 57:
                             output = float(output)
                             if int(output) == output:
@@ -176,7 +182,7 @@ def functionRunner(variablesSaved):
 #variables[0][1] = variables[0][1].replace('"', "")
 
 def operationRunner(content, variablesSaved):
-    global operators
+    global operators, main
     output = None
     if "&&" in content:
         output_ = []
@@ -265,8 +271,11 @@ def operationRunner(content, variablesSaved):
         #print("here you dumbass", CAnd(variables[0], variables[1]))
     else:
         print(Fore.RED + "Error: Line", row,
-              ": If-statement invalid. Code:", rawCode)
+              ": when-statement invalid. Code:", rawCode)
         print(Style.RESET_ALL)
+
+    if "!" in content:
+        output = not output
     return output
 
 def checkMath(variables):
@@ -277,7 +286,7 @@ def checkMath(variables):
 
 def MathOperation(expression):
     global error, rawCode
-    output = None
+    output = ""
     if "+" in expression:
         expression = expression.split("+")
         type_ = 0
@@ -296,20 +305,30 @@ def MathOperation(expression):
         output = minus(expression, type_)
     if "*" in expression:
         expression = expression.split("*")
-        for i in expression:
+        expressionErrorCheckerException = expression
+        for o in range(0, len(expressionErrorCheckerException)):
+            expressionErrorCheckerException[o] = expressionErrorCheckerException[o].replace("True", "").replace("False", "")
+            for n in operators:
+                expressionErrorCheckerException[o] = expressionErrorCheckerException[o].replace(n, "")
+        for i in expressionErrorCheckerException:
             for n in i:
                 if not 48 <= ord(n) <= 57 and ord(n) != 42 and ord(n) != 43 and ord(n) != 45 and ord(n) != 46 and ord(n) != 47:
-                    print(Fore.RED + "Error: Line" + str(row) + ": expecting int or float with * operator, received boolean or string. Code:", Fore.YELLOW + rawCode)
+                    print(Fore.RED + "Error: Line" + str(row) + ": expecting int or float with * operator, received boolean or string. Check is there's any unwanted symbols. Code:", Fore.YELLOW + rawCode)
                     print(Style.RESET_ALL)
                     error = True
                     return
         output = times(expression)
     if "/" in expression:
         expression = expression.split("/")
-        for i in expression:
+        expressionErrorCheckerException = expression
+        for o in range(0, len(expressionErrorCheckerException)):
+            expressionErrorCheckerException[o] = expressionErrorCheckerException[o].replace("True", "").replace("False", "")
+            for n in operators:
+                expressionErrorCheckerException[o] = expressionErrorCheckerException[o].replace(n, "")
+        for i in expressionErrorCheckerException:
             for n in i:
                 if not 48 <= ord(n) <= 57 and ord(n) != 42 and ord(n) != 43 and ord(n) != 45 and ord(n) != 46 and ord(n) != 47:
-                    print(Fore.RED + "Error: Line" + str(row) + ": expecting int or float with / operator, received boolean or string. Code:", Fore.YELLOW + rawCode)
+                    print(Fore.RED + "Error: Line" + str(row) + ": expecting int or float with / operator, received boolean or string. Check if there's any unwanted symbols. Code:", Fore.YELLOW + rawCode)
                     print(Style.RESET_ALL)
                     error = True
                     return
