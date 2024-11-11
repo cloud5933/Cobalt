@@ -92,6 +92,20 @@ def run(code, line, variablesSaved):
 def functionRunner(variablesSaved):
     global error, whenMode, resultOfStatement, whenLine, insideBracket
     if functionLine:
+        varBracketCounter = 0
+        for n in insideBracket:
+            if n == "{":
+                for i in range(0, len(insideBracket)):
+                    if insideBracket[i] == "{" or insideBracket[i] == "}":
+                        varBracketCounter += 1
+        if varBracketCounter % 2 == 0:
+            print(insideBracket.replace("{", "").replace("}", ""))
+        else:
+            print(Fore.RED + 'Error: Line ' + str(row) + ': syntax error: "{" and "}" is not in pair.', "Code:", Fore.YELLOW + rawCode)
+            print(Style.RESET_ALL)
+            error = True
+            return
+
         if outsideBracket.replace(" ", "") == "log":
 
 
