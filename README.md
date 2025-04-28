@@ -1,11 +1,11 @@
 the compiler is "runner.py"
 
-if you wanna check the code of the compiling, go to "syntex.py", and yes I know I spelt it wrong I'm just too
-lazy to change it :P
+if you wanna check the code of the compiling, go to "syntax.py", and yes i finally fixed the typo :D
+YAYYYY :DDDDDDDDD
 
 if you wanna try it out yourself just write your code in "cobaltTestFile.cb"
 
-and go to syntex.txt(spelt it wrong again :P) for the syntax documentation... not really... you'll know what I
+and go to syntax documentation.txt(yes I fixed the typo here too :D) for the syntax documentation... not really... you'll know what I
 meant soon :3
 
 there's a single dependant:
