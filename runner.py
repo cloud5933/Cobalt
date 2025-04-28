@@ -1,7 +1,7 @@
-#this file reads code and send it to "syntex.py" line by line (I know I spelt syntex wrong)
+#this file reads code and send it to "syntax.py" line by line (I know I spelt syntex wrong)
 
-import syntex
-from colorama import Fore, Back, Style
+import syntax
+from colorama import Fore
 
 fileDirectory = "cobaltTestFile.cb"  #the .cb file is the file saving the Cobalt program
 CBfile = open(fileDirectory, "r")
@@ -13,7 +13,7 @@ line = 0
 for i in codes:
     line += 1
     i = i.replace("\n", "")
-    if not syntex.error and not i.isspace() and not i == "":
+    if not syntax.error and not i.isspace() and not i == "":
         equalCounter = 0
         for n in i:
             if n == "=":
@@ -23,34 +23,33 @@ for i in codes:
             variablesSaved.append([i.replace(" ", "").split("=")[0], i.replace(" ", "").split("=")[1]])
 
         if i == "End":
-            if syntex.whenMode:
-                syntex.whenMode = False
+            if syntax.whenMode:
+                syntax.whenMode = False
             else:
-                syntex.error = True
-                print(Fore.RED + "Syntax Error: Found statement {End} but {when} statement is not found. Line"
-                      , line, Fore.RESET)
+                syntax.error = True
+                print(Fore.RED + "Syntax Error: Found statement {End} but {when} statement is not found. Line",
+                      line, Fore.RESET)
         #print("when mode:", syntex.whenMode)
-        if syntex.whenMode:
-            whenLine += syntex.whenLine
+        if syntax.whenMode:
+            whenLine += syntax.whenLine
             """
             """
             if whenLine == 1 and i[0] != " ":
-                syntex.error = True
-                print(Fore.RED + "Indentation Error: Found statement {when} statement but indention is not found. Line"
-                      , line, Fore.RESET)
+                syntax.error = True
+                print(Fore.RED + "Indentation Error: Found statement {when} statement but indention is not found. Line",
+                      line, Fore.RESET)
                 break
             if i[0] != " ":
-                syntex.whenMode = False
+                syntax.whenMode = False
                 whenLine = 0
-                syntex.run(i, line, variablesSaved)
+                syntax.run(i, line)
 
-            if syntex.resultOfStatement == False:
+            if not syntax.resultOfStatement:
                 continue
             else:
-                syntex.run(i, line, variablesSaved)
+                syntax.run(i, line)
                 continue
         else:
-            syntex.run(i, line, variablesSaved)
-
+            syntax.run(i, line)
 
 input("Press Enter To Exit: ")

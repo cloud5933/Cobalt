@@ -1,0 +1,22 @@
+#here is the note of the syntax
+
+for when-statement:
+
+when;{condition}:
+    {code}
+    End
+
+log:
+
+log:content
+
+and:
+
+x&&y
+
+or:
+
+x||y
+
+for the remaining just go read my code, it ain't that long, too lazy to write a documentation lol, plus most of them
+works like a combine of python, C++, and some of my own syntaxes

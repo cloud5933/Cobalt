@@ -1,7 +1,8 @@
-log:5/2==2.5&&1+1<=2*2/1
-log:"hello world"
-log:8-9
-log:8/3
-when;"hi"=="h"+"i":
- log:"hi"
+log: 5/2 ==  2.5  && 1+1<=2*2/1
+log : "hello world"
+log : 4-3*9
+log:8/3/2/5
+log:7-5-6
+when ; 1 == 1 && "hu" == "h"+"i":
+    log:"hi"
 log:"please work"
